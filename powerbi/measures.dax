@@ -195,9 +195,7 @@ SWITCH (
 )
 
 // fact_orders → Weekday Order (to sort purchase_weekday Mon→Sun via "Sort by column")
+// Built from the timestamp, not from purchase_weekday: a sort-by column that
+// refers to the column it sorts causes a circular dependency error.
 Weekday Order =
-SWITCH (
-    fact_orders[purchase_weekday],
-    "Monday", 1, "Tuesday", 2, "Wednesday", 3, "Thursday", 4,
-    "Friday", 5, "Saturday", 6, "Sunday", 7
-)
+WEEKDAY ( fact_orders[order_purchase_timestamp], 2 )   // 1 = Monday ... 7 = Sunday
