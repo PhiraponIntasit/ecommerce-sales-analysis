@@ -134,7 +134,13 @@ DIVIDE (
 )
 
 Avg Review (On time) =
-CALCULATE ( [Avg Review Score], fact_orders[is_late] = 0 )
+// Note: in DAX, BLANK = 0 is TRUE, so is_late = 0 alone would also include
+// undelivered orders (is_late is blank). Filter on delivered orders explicitly.
+CALCULATE (
+    [Avg Review Score],
+    fact_orders[is_late] = 0,
+    fact_orders[is_delivered] = TRUE ()
+)
 
 Avg Review (Late) =
 CALCULATE ( [Avg Review Score], fact_orders[is_late] = 1 )
